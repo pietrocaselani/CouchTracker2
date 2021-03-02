@@ -33,7 +33,7 @@ let project = Project(
     name: "CouchTracker2",
     organizationName: "Pietro Caselani",
     packages: [
-        .local(path: "Features/TrendingMovies")
+        .local(path: "CouchTrackerPackages")
     ],
     settings: nil,
     targets: targets,
