@@ -1,45 +1,44 @@
 import Foundation
+import protocol Combine.TopLevelEncoder
 
 public struct HTTPBody: Equatable {
     public static let empty = HTTPBody(
-        isEmpty: true,
-        additionalHeaders: [:],
-        encode: { Data() }
+        data: nil,
+        additionalHeaders: nil
     )
 
-    public let isEmpty: Bool
-    public let additionalHeaders: [String: String]
-    public let encode: () throws -> Data
+    public let data: Data?
+    public let additionalHeaders: [String: String]?
 
-    public static func == (lhs: HTTPBody, rhs: HTTPBody) -> Bool {
-        let lhsData = try? lhs.encode()
-        let rhsData = try? rhs.encode()
-
-        return lhsData == rhsData &&
-            lhs.isEmpty == rhs.isEmpty &&
-            lhs.additionalHeaders == rhs.additionalHeaders
-    }
-
-    public static func encodableModel<Model: Encodable>(
+    public static func json<Model: Encodable>(
         encoder: JSONEncoder,
         value: Model
-    ) -> HTTPBody {
+    ) throws -> HTTPBody {
+        try .encodableModel(
+            encoder: encoder,
+            value: value,
+            additionalHeaders: ["Content-Type": "application/json; charset=utf-8"]
+        )
+    }
+
+    public static func encodableModel<Model: Encodable, Encoder>(
+        encoder: Encoder,
+        value: Model,
+        additionalHeaders: [String: String]? = nil
+    ) throws -> HTTPBody where Encoder: TopLevelEncoder, Encoder.Output == Data {
         .init(
-            isEmpty: false,
-            additionalHeaders: ["Content-Type": "application/json; charset=utf-8"],
-            encode: {
-                try encoder.encode(value)
-            }
+            data: try encoder.encode(value),
+            additionalHeaders: additionalHeaders
         )
     }
 
     public static func data(
-        _ data: Data
+        _ data: Data,
+        additionalHeaders: [String: String]? = nil
     ) -> HTTPBody {
         .init(
-            isEmpty: data.isEmpty,
-            additionalHeaders: [:],
-            encode: { data }
+            data: data,
+            additionalHeaders: additionalHeaders
         )
     }
 }

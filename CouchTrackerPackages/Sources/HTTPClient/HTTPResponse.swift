@@ -1,4 +1,6 @@
 import Foundation
+// T
+import Combine
 
 public struct HTTPResponse: Equatable {
     private let response: HTTPURLResponse
@@ -38,10 +40,10 @@ public struct HTTPResponse: Equatable {
             String(data: data, encoding: encoding)
         }
 
-        public func decodeAsModel<T: Decodable>(
-            _ type: T.Type,
-            using decoder: JSONDecoder = .init()
-        ) throws -> T {
+        public func decoded<T: Decodable, Decoder>(
+            type: T.Type,
+            decoder: Decoder
+        ) throws -> T where Decoder: TopLevelDecoder, Decoder.Input == Data {
             try decoder.decode(type, from: data)
         }
     }

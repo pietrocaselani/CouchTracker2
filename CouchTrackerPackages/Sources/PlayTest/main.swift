@@ -101,9 +101,8 @@ func createTraktRetrofit() throws -> Retrofit {
     let baseURL = URL(string: "https://\(apiHost)")!
     let clientID = realClientID
 
-    let session = URLSession.shared
-    let client = HTTPClient.using(
-        responder: .fromURLSession(session),
+    let responder = HTTPResponder.chaining(
+        responder: .fromURLSession(.shared),
         middlewares: [
             .traktHeaders(clientID: clientID)
         ]
@@ -116,9 +115,9 @@ func createTraktRetrofit() throws -> Retrofit {
     traktDecoder.keyDecodingStrategy = .convertFromSnakeCase
     //Add date strategy
 
-    return try Retrofit(
+    return try .make(
         baseURL: baseURL,
-        client: client,
+        responder: responder,
         encoder: traktEncoder,
         decoder: traktDecoder
     )
