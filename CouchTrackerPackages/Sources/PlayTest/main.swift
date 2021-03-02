@@ -12,7 +12,6 @@ extension HTTPMiddleware {
 
       request.headers["trakt-api-key"] = clientID
       request.headers["trakt-api-version"] = "2"
-      request.headers["Content-Type"] = "application/json"
 
       return responder.respondTo(request)
     }
@@ -126,19 +125,31 @@ func createTraktRetrofit() throws -> Retrofit {
 var cancellables = Set<AnyCancellable>()
 var completedGET = false
 var completedPOST = false
+var completedGETResult = false
 func completed() -> Bool {
-    completedGET && completedPOST
+    completedGET && completedPOST && completedGETResult
 }
 
 let retrofit = try createTraktRetrofit()
 
-retrofit.execute(
+let trendingMoviesPublisher = retrofit.execute(
     TraktService.trendingMovies(page: 1, limit: 30)
-).sink { completion in
-    print(">>> Completion: \(completion)")
+)
+
+trendingMoviesPublisher
+    .map(Result<[TrendingMovie], HTTPError>.success)
+    .catch { error in
+        Just(Result<[TrendingMovie], HTTPError>.failure(error))
+    }.sink { result in
+        print(result)
+        completedGETResult = true
+    }.store(in: &cancellables)
+
+trendingMoviesPublisher.sink { completion in
+//    print(">>> Completion: \(completion)")
     completedGET = true
 } receiveValue: { movies in
-    print(">>> Movies: \(movies)")
+//    print(">>> Movies: \(movies)")
 }.store(in: &cancellables)
 
 while completed() == false {}
