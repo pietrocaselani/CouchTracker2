@@ -21,7 +21,7 @@ public struct HTTPBody: Equatable {
     }
 
     public static func encodableModel<Model: Encodable>(
-        encoder: JSONEncoder = .init(),
+        encoder: JSONEncoder,
         value: Model
     ) -> HTTPBody {
         .init(

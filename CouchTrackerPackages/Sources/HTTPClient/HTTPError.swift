@@ -76,7 +76,11 @@ public struct HTTPError: Error, Equatable {
     )
   }
 
-  static func decodingBody(request: HTTPRequest, response: HTTPResponse, error: Error) -> HTTPError {
+  public static func decodingBody(
+    request: HTTPRequest,
+    response: HTTPResponse,
+    error: Error
+  ) -> HTTPError {
     .init(
       code: .decodingBody,
       request: request,

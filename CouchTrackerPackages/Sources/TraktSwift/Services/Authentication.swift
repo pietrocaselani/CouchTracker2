@@ -1,19 +1,26 @@
 import HTTPClient
 
 public struct AccessTokenService {
-    public struct Parameters: Encodable {
-        public let code: String
+    public struct AccessTokenRefreshBody: Encodable {
+        public let grantType = "refresh_token"
         public let clientID, clientSecret: String
-        public let redirectURL, grantType: String
+        public let refreshToken, redirectURL: String
     }
+
+    public struct AccessTokenBody: Encodable {
+        public let grantType = "authorization_code"
+        public let clientID, clientSecret: String
+        public let code, redirectURL: String
+    }
+
 
 //    let get: (Parameters) -> APICallPublisher<Token>
 
-    func get(
-        _ parameters: Parameters
-    ) -> (HTTPClient) -> APICallPublisher<Token> {
-
-    }
+//    func get(
+//        _ parameters: Parameters
+//    ) -> (HTTPClient) -> APICallPublisher<Token> {
+//
+//    }
 
 //    static func from(apiClient: APIClient) -> Self {
 //        .init(get: { params in
@@ -28,13 +35,10 @@ public struct AccessTokenService {
 }
 
 public struct RefreshTokenService {
-    public struct Parameters: Encodable {
-        public let refreshToken: String
-        public let client_id, clientSecret: String
-        public let redirectURL, grantType: String
-    }
-
-    let refresh: (Parameters) -> APICallPublisher<Token>
+//    public struct Parameters: Encodable {
+//    }
+//
+//    let refresh: (Parameters) -> APICallPublisher<Token>
 
 //    static func from(apiClient: APIClient) -> Self {
 //        .init(refresh: { params in
