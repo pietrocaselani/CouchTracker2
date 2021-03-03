@@ -1,3 +1,5 @@
+import Foundation
+
 private let tokenKey = "trakt_token"
 private let tokenExperirationDateKey = "trakt_token_experiration_date"
 

@@ -101,7 +101,7 @@ func createTraktRetrofit() throws -> Retrofit {
     let clientID = realClientID
 
     let responder = HTTPResponder.chaining(
-        responder: .fromURLSession(.shared),
+        .fromURLSession(.shared),
         middlewares: [
             .traktHeaders(clientID: clientID)
         ]

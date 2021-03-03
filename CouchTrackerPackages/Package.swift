@@ -54,7 +54,7 @@ let package = Package(
         ),
         .target(
             name: "TraktSwift",
-            dependencies: ["HTTPClient"]
+            dependencies: ["HTTPClient", "RetrofitSwift"]
         ),
         .testTarget(
             name: "TraktSwiftTests",

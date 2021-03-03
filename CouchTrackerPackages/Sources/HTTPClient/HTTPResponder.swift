@@ -12,7 +12,7 @@ public struct HTTPResponder {
     }
 
     public static func chaining(
-        responder: HTTPResponder,
+        _ responder: HTTPResponder,
         middlewares: [HTTPMiddleware]
     ) -> Self {
         .init(
@@ -28,7 +28,7 @@ public struct HTTPResponder {
         middlewares: HTTPMiddleware...
     ) -> Self {
         .chaining(
-            responder: self,
+            self,
             middlewares: middlewares
         )
     }

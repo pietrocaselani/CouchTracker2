@@ -14,20 +14,6 @@ public struct Retrofit {
         encoder: JSONEncoder = .init(),
         decoder: JSONDecoder = .init()
     ) throws -> Self {
-        try .init(
-            baseURL: baseURL,
-            responder: responder,
-            encoder: encoder,
-            decoder: decoder
-        )
-    }
-
-    private init(
-        baseURL: URL,
-        responder: HTTPResponder,
-        encoder: JSONEncoder,
-        decoder: JSONDecoder
-    ) throws {
         guard
             let components = URLComponents(
                 url: baseURL,
@@ -37,10 +23,35 @@ public struct Retrofit {
             throw URLError(.badURL)
         }
 
+        return .init(
+            components: components,
+            responder: responder,
+            encoder: encoder,
+            decoder: decoder
+        )
+    }
+
+    private init(
+        components: URLComponents,
+        responder: HTTPResponder,
+        encoder: JSONEncoder,
+        decoder: JSONDecoder
+    ) {
         self.responder = responder
         self.components = components
         self.encoder = encoder
         self.decoder = decoder
+    }
+
+    public func chaining(
+        middlewares: [HTTPMiddleware]
+    ) -> Self {
+        .init(
+            components: components,
+            responder: .chaining(responder, middlewares: middlewares),
+            encoder: encoder,
+            decoder: decoder
+        )
     }
 
     public func execute<Response: Decodable>(
