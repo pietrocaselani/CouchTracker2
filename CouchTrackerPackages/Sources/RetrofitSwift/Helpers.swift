@@ -2,6 +2,8 @@ import Combine
 import HTTPClient
 import Foundation
 
+public typealias APICallPublisher<T> = AnyPublisher<T, HTTPError>
+
 public extension HTTPCallPublisher where Output == HTTPResponse {
     func decodedResponse<Model: Decodable, Decoder>(
         type: Model.Type,

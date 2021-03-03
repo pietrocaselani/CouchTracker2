@@ -38,7 +38,9 @@ public final class Trakt {
     }
 
     public let authenticator: Authenticator?
-    private let retrofit: Retrofit
+    public let retrofit: Retrofit
+
+    public lazy var movies = MoviesService(retrofit: retrofit)
 
     public init(
         responder: HTTPResponder,
@@ -49,7 +51,7 @@ public final class Trakt {
             baseURL: baseURL,
             responder: .chaining(
                 responder,
-                [.traktHeaders(clientID: credentials.clientId)]
+                middlewares: [.traktHeaders(clientID: credentials.clientId)]
             ),
             encoder: .init(),
             decoder: .init()

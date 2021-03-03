@@ -29,7 +29,9 @@ let package = Package(
         .target(
             name: "PlayTest",
             dependencies: [
-                "RetrofitSwift"
+                "HTTPClient",
+                "RetrofitSwift",
+                "TraktSwift"
             ]
         ),
         .target(
