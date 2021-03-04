@@ -25,7 +25,7 @@ let targets = Project.makeAppTargets(
     name: "CouchTracker2",
     platform: .iOS,
     dependencies: [
-        .package(product: "TrendingMovie")
+        .package(product: "TraktSwift")
     ]
 )
 

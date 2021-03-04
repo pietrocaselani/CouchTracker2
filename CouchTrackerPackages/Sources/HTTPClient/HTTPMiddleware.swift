@@ -9,7 +9,7 @@ public struct HTTPMiddleware {
 }
 
 private extension HTTPMiddleware {
-  func makeRespponder(
+  func makeResponder(
     chainingTo responder: HTTPResponder
   ) -> HTTPResponder {
     .init(
@@ -24,8 +24,8 @@ extension Array where Element == HTTPMiddleware {
   func makeResponder(chainingTo responder: HTTPResponder) -> HTTPResponder {
     var responder = responder
 
-    for middleware in reversed() {
-      responder = middleware.makeRespponder(chainingTo: responder)
+    for middleware in self {
+      responder = middleware.makeResponder(chainingTo: responder)
     }
 
     return responder

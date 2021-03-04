@@ -3,7 +3,7 @@ import Foundation
 import Combine
 
 public struct HTTPResponse: Equatable {
-    private let response: HTTPURLResponse
+    public let rawResponse: HTTPURLResponse
     public let request: HTTPRequest
     public let body: Body
     public let status: HTTPStatus
@@ -14,7 +14,7 @@ public struct HTTPResponse: Equatable {
         request: HTTPRequest,
         body: Data
     ) {
-        self.response = response
+        self.rawResponse = response
         self.request = request
         self.body = .init(data: body)
         self.status = .init(rawValue: response.statusCode)
@@ -22,11 +22,11 @@ public struct HTTPResponse: Equatable {
     }
 
     public var headers: [AnyHashable: Any] {
-        response.allHeaderFields
+        rawResponse.allHeaderFields
     }
 
     public var url: URL? {
-        response.url
+        rawResponse.url
     }
 
     public struct Body: Equatable {
